@@ -10,7 +10,7 @@ Creating a cheating verison of hangman that would make winning more difficult fo
 
 ## If you plan to collaborate with one or two classmates, what are their names?
 
-Yatri Patel and Srishty Muthusekaran
+Yatri Patel 
 
 ## Do you have any questions of your own?
 
