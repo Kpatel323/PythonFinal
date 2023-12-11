@@ -1,4 +1,5 @@
 # Sports Field Finder
+# By: Yatri Patel and Kush Patel
 This project uses Flask as a backend service and HTML, CSS, & JavaScript for the frontend.
 
 How to run:
