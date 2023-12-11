@@ -32,7 +32,7 @@
   </form>
 
   <div id="businesses" class="card">
-    <!-- Business cards will be dynamically populated here -->
+    <!-- Business cards will be dynamically shown here -->
   </div>
 
   <script>
@@ -49,6 +49,7 @@
 
   document.getElementById('errorText').style.display = 'none';
 
+  //This is the url to fetch from backend python server, and will return the json data that we can use to modify frontend
   try {
     const url = `http://127.0.0.1:5000/api/find-sports-fields?location=${location}&option=${option}`;
     const response = await fetch(url);
@@ -58,11 +59,9 @@
       displayBusinesses(data.businesses);
     } else {
       console.error('Error:', response.statusText);
-      // Handle error: display error message
     }
   } catch (error) {
     console.error('Error:', error);
-    // Handle error: display error message
   }
 });
 
@@ -70,6 +69,7 @@ function displayBusinesses(businesses) {
   const businessesContainer = document.getElementById('businesses');
   businessesContainer.innerHTML = '';
 
+  //Iterate through businesses and add in a card, which allows us to have elements contained inside neatly
   businesses.forEach((business) => {
     const card = document.createElement('div');
     card.classList.add('card');
