@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Local Sports Field Finder</title>
+  <style>
+ 
+    .card {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: center;
+      gap: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1 class="pt-5 text-blue-700">Local Sports Field Finder</h1>
+  <h3 class="pd-50">Enter your location or zipcode</h3>
+  <form id="searchForm">
+    <div class="input-group">
+      <input id="inputLocation" type="text" placeholder="Enter location or zipcode">
+      <select id="selectOption">
+        <option value="best_match">Best match</option>
+        <option value="rating">Rating</option>
+        <option value="distance">Distance</option>
+      </select>
+      <button type="submit" id="searchButton">Search</button>
+    </div>
+    <p id="errorText" style="color: red; display: none;">Location or Zipcode is required.</p>
+  </form>
+
+  <div id="businesses" class="card">
+    <!-- Business cards will be dynamically populated here -->
+  </div>
+
+  <script>
+  document.getElementById('searchForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const location = document.getElementById('inputLocation').value;
+  const option = document.getElementById('selectOption').value;
+
+  if (!location) {
+    document.getElementById('errorText').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('errorText').style.display = 'none';
+
+  try {
+    const url = `http://127.0.0.1:5000/api/find-sports-fields?location=${location}&option=${option}`;
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const data = await response.json();
+      displayBusinesses(data.businesses);
+    } else {
+      console.error('Error:', response.statusText);
+      // Handle error: display error message
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle error: display error message
+  }
+});
+
+function displayBusinesses(businesses) {
+  const businessesContainer = document.getElementById('businesses');
+  businessesContainer.innerHTML = '';
+
+  businesses.forEach((business) => {
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    const cardHeader = document.createElement('div');
+    cardHeader.classList.add('card-header');
+
+    const heading = document.createElement('h2');
+    heading.textContent = business.name;
+
+    cardHeader.appendChild(heading);
+    card.appendChild(cardHeader);
+
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+    cardBody.textContent = business.location.display_address.join(', ');
+
+    card.appendChild(cardBody);
+
+    const cardFooter = document.createElement('div');
+    cardFooter.classList.add('card-footer');
+
+    const viewButton = document.createElement('button');
+    viewButton.textContent = 'View here';
+    viewButton.addEventListener('click', () => {
+      window.open(business.url, '_blank');
+    });
+
+    cardFooter.appendChild(viewButton);
+    card.appendChild(cardFooter);
+
+    businessesContainer.appendChild(card);
+  });
+}
+
+  </script>
+</body>
+</html>
